@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zodoor · Senin kapın hangisi?</title>
+<meta name="description" content="Adına ve burcuna göre açılan kapılar, 1000+ mini oyun ve sana özel kader kartı.">
+<meta property="og:title" content="Zodoor · Senin kapın hangisi?">
+<meta property="og:description" content="Adına ve burcuna göre açılan kapılar, 1000+ mini oyun ve sana özel kader kartı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Unbounded:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0c1a1f; --panel: #12262c; --fg: #eef4f0; --muted: #93abb0; --brass: #e8b866; --love: #ff7aa8; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--ink); color: var(--fg); font-family: Manrope, system-ui, sans-serif; }
+  body { background: radial-gradient(70% 50% at 50% 30%, #163a42, var(--ink) 70%) fixed; display: grid; place-items: center; min-height: 100vh; padding: 24px 16px; }
+  .wrap { max-width: 420px; width: 100%; text-align: center; display: grid; gap: 18px; }
+  .logo { font: 900 22px Unbounded, sans-serif; letter-spacing: .3em; }
+  .logo b { color: var(--brass); }
+  .door { width: 110px; height: 168px; margin: 8px auto; border: 3px solid var(--brass); border-radius: 60px 60px 8px 8px; position: relative; box-shadow: 0 0 40px rgba(232,184,102,.45), inset 0 0 40px rgba(232,184,102,.25); animation: glow 2.6s ease-in-out infinite; }
+  .door::after { content: ''; position: absolute; left: 50%; top: 55%; width: 14px; height: 22px; margin-left: -7px; border-radius: 7px 7px 2px 2px; background: #ffd56b; box-shadow: 0 0 14px #ffd56b; }
+  @keyframes glow { 50% { box-shadow: 0 0 70px rgba(232,184,102,.7), inset 0 0 50px rgba(232,184,102,.35); } }
+  h1 { font: 800 28px/1.15 Unbounded, sans-serif; margin: 0; }
+  p { color: var(--muted); margin: 0; line-height: 1.5; }
+  .big { font: 900 56px Unbounded, sans-serif; color: var(--love); }
+  .btn { display: block; padding: 16px; border-radius: 14px; background: var(--brass); color: #1a1206; font-weight: 800; text-decoration: none; font-size: 17px; }
+  .note { font-size: 13px; }
+  .love h1 { color: var(--love); }
+</style>
+</head>
+<body>
+<main class="wrap" id="m">
+  <div class="logo">ZO<b>DOOR</b></div>
+  <div class="door" aria-hidden="true"></div>
+  <h1 id="t">Her ismin bir oyunu var.</h1>
+  <p id="s">Adını ve doğum tarihini fısılda. Kapılar ve ardındaki 1000+ oyun yalnızca senin için şekillensin.</p>
+  <div id="x"></div>
+  <a class="btn" id="b" href="https://apps.apple.com/app/id6837399722">Zodoor'u indir</a>
+  <p class="note" id="n">iPhone için · Yakında App Store'da</p>
+</main>
+<script>
+(function () {
+  var SIGNS = [['♈︎','Koç','Aries'],['♉︎','Boğa','Taurus'],['♊︎','İkizler','Gemini'],['♋︎','Yengeç','Cancer'],['♌︎','Aslan','Leo'],['♍︎','Başak','Virgo'],['♎︎','Terazi','Libra'],['♏︎','Akrep','Scorpio'],['♐︎','Yay','Sagittarius'],['♑︎','Oğlak','Capricorn'],['♒︎','Kova','Aquarius'],['♓︎','Balık','Pisces']];
+  var tr = (navigator.language || 'tr').toLowerCase().indexOf('tr') === 0;
+  var $ = function (id) { return document.getElementById(id); };
+  var txt = function (id, v) { $(id).textContent = v; };
+  var unhex = function (x) { try { return new TextDecoder().decode(new Uint8Array(x.match(/../g).map(function (y) { return parseInt(y, 16); }))).slice(0, 20); } catch (e) { return ''; } };
+  if (!tr) { document.documentElement.lang = 'en'; txt('t', 'Every name has its own game.'); txt('s', 'Whisper your name and birthday. Your doors, and the 1000+ games behind them, take shape only for you.'); txt('b', 'Get Zodoor'); txt('n', 'For iPhone · Coming soon to the App Store'); }
+  var h = (location.hash || '').replace(/^#/, '');
+  var c = /^c-([0-9a-f])([0-9a-f]{10})([0-9a-f]{2,80})$/i.exec(h);
+  var l = /^l-([0-9a-b])([0-9a-f]{2})([0-9a-f]{2,80})-([0-9a-f]{2,80})$/i.exec(h);
+  if (c) {
+    var sg = SIGNS[parseInt(c[1], 16)] || SIGNS[0], nm = unhex(c[3]);
+    txt('t', tr ? nm + ' seni kapılara çağırdı' : nm + ' challenged you');
+    txt('s', tr ? sg[0] + ' ' + sg[1] + ' burcu kapılarını açtı. Sen de aç, yıldızlarınız ne kadar uyumlu görün.' : sg[0] + ' ' + sg[2] + ' opened their doors. Open yours and see how your stars match.');
+  } else if (l) {
+    var a = unhex(l[3]), b = unhex(l[4]), p = Math.min(100, parseInt(l[2], 16));
+    $('m').classList.add('love');
+    txt('t', a + ' ♡ ' + b);
+    $('x').innerHTML = '<div class="big">%' + p + '</div>';
+    txt('s', tr ? 'Kapılar bu ikilinin uyumunu böyle gördü. Senin crush\'ınla uyumun kaç?' : 'This is how the doors saw this pair. What about you and your crush?');
+  }
+})();
+</script>
+</body>
+</html>
