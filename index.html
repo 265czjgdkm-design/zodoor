@@ -25,6 +25,7 @@
   .big { font: 900 56px Unbounded, sans-serif; color: var(--love); }
   .btn { display: block; padding: 16px; border-radius: 14px; background: var(--brass); color: #1a1206; font-weight: 800; text-decoration: none; font-size: 17px; }
   .note { font-size: 13px; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 1px solid #2a4148; }
   .love h1 { color: var(--love); }
 </style>
 </head>
@@ -35,7 +36,8 @@
   <h1 id="t">Her ismin bir oyunu var.</h1>
   <p id="s">Adını ve doğum tarihini fısılda. Kapılar ve ardındaki 1000+ oyun yalnızca senin için şekillensin.</p>
   <div id="x"></div>
-  <a class="btn" id="b" href="https://apps.apple.com/app/id6837399722">Zodoor'u indir</a>
+  <a class="btn" id="o" href="zodoor://open" hidden>Zodoor'da aç</a>
+  <a class="btn ghost" id="b" href="https://apps.apple.com/app/id6837399722">Zodoor'u indir</a>
   <p class="note" id="n">iPhone için · Yakında App Store'da</p>
 </main>
 <script>
@@ -48,8 +50,16 @@
   if (!tr) { document.documentElement.lang = 'en'; txt('t', 'Every name has its own game.'); txt('s', 'Whisper your name and birthday. Your doors, and the 1000+ games behind them, take shape only for you.'); txt('b', 'Get Zodoor'); txt('n', 'For iPhone · Coming soon to the App Store'); }
   var h = (location.hash || '').replace(/^#/, '');
   var c = /^c-([0-9a-f])([0-9a-f]{10})([0-9a-f]{2,80})$/i.exec(h);
+  var d = /^d-([0-9a-b])([1-9])([0-9a-f]{8})([0-9a-f]+)$/i.exec(h);
   var l = /^l-([0-9a-b])([0-9a-f]{2})([0-9a-f]{2,80})-([0-9a-f]{2,80})$/i.exec(h);
-  if (c) {
+  if (h) { var o = $('o'); o.hidden = false; o.href = 'zodoor://open#' + h; if (!tr) o.textContent = 'Open in Zodoor'; }
+  if (d) {
+    var n = parseInt(d[2], 16), body = d[4], tot = 0;
+    for (var i = 0; i < n; i++) tot += parseInt(body.substr(i * 5 + 3, 2), 16) || 0;
+    var dn = unhex(body.slice(n * 5)), ds = SIGNS[parseInt(d[1], 16)] || SIGNS[0];
+    txt('t', tr ? dn + ' sana meydan okudu ⚔︎' : dn + ' challenged you ⚔︎');
+    txt('s', tr ? ds[0] + ' ' + ds[1] + ' · aynı ' + n + ' kapı, aynı oyunlar. Onun puanı: ' + tot + '. Geçebilir misin?' : ds[0] + ' ' + ds[2] + ' · the same ' + n + ' doors and games. Their score: ' + tot + '. Can you beat it?');
+  } else if (c) {
     var sg = SIGNS[parseInt(c[1], 16)] || SIGNS[0], nm = unhex(c[3]);
     txt('t', tr ? nm + ' seni kapılara çağırdı' : nm + ' challenged you');
     txt('s', tr ? sg[0] + ' ' + sg[1] + ' burcu kapılarını açtı. Sen de aç, yıldızlarınız ne kadar uyumlu görün.' : sg[0] + ' ' + sg[2] + ' opened their doors. Open yours and see how your stars match.');
